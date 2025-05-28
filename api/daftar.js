@@ -31,49 +31,30 @@ function runMiddleware(req, res, fn) {
 }
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).end(); // Method Not Allowed
-  }
+  if (req.method !== 'POST') return res.status(405).end();
 
   try {
     await runMiddleware(req, res, upload.fields([
       { name: 'file-swp' },
       { name: 'file-follow' }
     ]));
-  } catch (err) {
-    return res.status(400).json({ error: "Ukuran file maksimal 5MB atau format tidak valid." });
-  }
 
-  const uploadToCloudinary = (fileBuffer, filename) => {
-    const bufferStream = new Readable();
-    bufferStream.push(fileBuffer);
-    bufferStream.push(null);
+    console.log('req.body:', req.body);
+    console.log('req.files:', req.files);
 
-    return new Promise((resolve, reject) => {
-      const stream = cloudinary.uploader.upload_stream(
-        { folder: 'uploads', public_id: filename.replace(/\.[^/.]+$/, "") }, // hilangkan duplikat ekstensi
-        (error, result) => {
-          if (error) return reject(error);
-          resolve(result.secure_url);
-        }
-      );
-      bufferStream.pipe(stream);
-    });
-  };
-
-  try {
     const fileSWP = req.files['file-swp']?.[0];
     const fileFollow = req.files['file-follow']?.[0];
 
-    const swpUrl = fileSWP ? await uploadToCloudinary(fileSWP.buffer, fileSWP.originalname) : null;
-    const followUrl = fileFollow ? await uploadToCloudinary(fileFollow.buffer, fileFollow.originalname) : null;
+    const swpUrl = fileSWP ? await uploadToCloudinary(fileSWP.buffer, fileSWP.originalname || 'swp') : null;
+    const followUrl = fileFollow ? await uploadToCloudinary(fileFollow.buffer, fileFollow.originalname || 'follow') : null;
 
-    // Ambil data text dari form
     const { name, email, instansi, nomor } = req.body;
+    if (!name || !email || !instansi || !nomor) {
+      return res.status(400).json({ error: "Form tidak lengkap." });
+    }
 
-    // Simpan ke MongoDB
     const client = await clientPromise;
-    const db = client.db(); // default DB dari URI
+    const db = client.db();
     const collection = db.collection('form_daftar');
 
     await collection.insertOne({
@@ -86,8 +67,6 @@ export default async function handler(req, res) {
       timestamp: new Date()
     });
 
-    client.close();
-
     return res.status(200).json({
       message: "Upload & penyimpanan berhasil",
       swpUrl,
@@ -95,7 +74,7 @@ export default async function handler(req, res) {
     });
 
   } catch (error) {
-    console.error(error);
+    console.error('Handler error:', error);
     return res.status(500).json({ error: "Terjadi kesalahan saat upload atau simpan data." });
   }
 }
