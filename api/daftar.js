@@ -67,11 +67,7 @@ export default async function handler(req, res) {
     const swpUrl = fileSWP ? await uploadToCloudinary(fileSWP.buffer, fileSWP.originalname) : null;
     const followUrl = fileFollow ? await uploadToCloudinary(fileFollow.buffer, fileFollow.originalname) : null;
 
-    return res.status(200).json({
-      message: "Upload berhasil",
-      swpUrl,
-      followUrl
-    });
+    return "Upload Berhasil. Terimakasih Telah Mendaftar";
 
   } catch (error) {
     return res.status(500).json({ error: "Upload ke Cloudinary gagal." });
