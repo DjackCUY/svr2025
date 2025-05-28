@@ -66,9 +66,6 @@ export default async function handler(req, res) {
       { name: 'file-follow' },
     ]));
 
-    console.log('req.body:', req.body);
-    console.log('req.files:', req.files);
-
     const fileSWP = req.files['file-swp']?.[0];
     const fileFollow = req.files['file-follow']?.[0];
 
@@ -101,14 +98,10 @@ export default async function handler(req, res) {
 
     console.log('MongoDB insert result:', insertResult);
 
-    return res.status(200).json({
-      message: "Upload & penyimpanan berhasil",
-      swpUrl,
-      followUrl,
-    });
+    return res.status(200).send("OK");
 
   } catch (error) {
-    console.error('Handler error:', error);
+    // console.error('Handler error:', error);
     return res.status(500).json({
       error: error.message || "Terjadi kesalahan saat upload atau simpan data.",
     });
