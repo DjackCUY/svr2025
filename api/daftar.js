@@ -1,6 +1,7 @@
 import { v2 as cloudinary } from 'cloudinary';
 import multer from 'multer';
 import { Readable } from 'stream';
+import clientPromise from "@/lib/mongodb";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -50,7 +51,7 @@ export default async function handler(req, res) {
 
     return new Promise((resolve, reject) => {
       const stream = cloudinary.uploader.upload_stream(
-        { folder: 'uploads', public_id: filename },
+        { folder: 'uploads', public_id: filename.replace(/\.[^/.]+$/, "") }, // hilangkan duplikat ekstensi
         (error, result) => {
           if (error) return reject(error);
           resolve(result.secure_url);
@@ -67,9 +68,34 @@ export default async function handler(req, res) {
     const swpUrl = fileSWP ? await uploadToCloudinary(fileSWP.buffer, fileSWP.originalname) : null;
     const followUrl = fileFollow ? await uploadToCloudinary(fileFollow.buffer, fileFollow.originalname) : null;
 
-    return "Upload Berhasil. Terimakasih Telah Mendaftar";
+    // Ambil data text dari form
+    const { name, email, instansi, nomor } = req.body;
+
+    // Simpan ke MongoDB
+    const client = await clientPromise;
+    const db = client.db(); // default DB dari URI
+    const collection = db.collection('form_daftar');
+
+    await collection.insertOne({
+      name,
+      email,
+      instansi,
+      nomor,
+      swpUrl,
+      followUrl,
+      timestamp: new Date()
+    });
+
+    client.close();
+
+    return res.status(200).json({
+      message: "Upload & penyimpanan berhasil",
+      swpUrl,
+      followUrl
+    });
 
   } catch (error) {
-    return res.status(500).json({ error: "Upload ke Cloudinary gagal." });
+    console.error(error);
+    return res.status(500).json({ error: "Terjadi kesalahan saat upload atau simpan data." });
   }
 }
