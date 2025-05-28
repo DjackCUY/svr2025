@@ -1,7 +1,7 @@
 import { v2 as cloudinary } from 'cloudinary';
 import multer from 'multer';
 import { Readable } from 'stream';
-import clientPromise from "@/lib/mongodb";
+import clientPromise from "../lib/mongodb";
 
 // Konfigurasi Cloudinary
 cloudinary.config({
