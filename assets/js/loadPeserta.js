@@ -12,8 +12,8 @@ data.forEach((peserta, index) => {
         <td>${peserta.email}</td>
         <td>${peserta.instansi}</td>
         <td>${peserta.nomor}</td>
-        <td><a href="${peserta.swpUrl}">SWP</a></td>
-        <td><a href="${peserta.followUrl}">FOLLOW</a></td>
+        <td><a href="${peserta.swpUrl}" target="_blank">SWP</a></td>
+        <td><a href="${peserta.followUrl}" target="_blank">FOLLOW</a></td>
         <td>${peserta.timestamp}</td>
     </tr>
     `;
