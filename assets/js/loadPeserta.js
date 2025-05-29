@@ -8,12 +8,13 @@ data.forEach((peserta, index) => {
     const row = `
     <tr>
         <td>${index + 1}</td>
-        <td>${peserta.nama}</td>
+        <td>${peserta.name}</td>
         <td>${peserta.email}</td>
         <td>${peserta.instansi}</td>
         <td>${peserta.nomor}</td>
         <td>${peserta.swpUrl}</td>
-        <td>${peserta.FollowUrl}</td>
+        <td><a href="${peserta.swpUrl}">SWP</a></td>
+        <td><a href="${peserta.followUrl}">FOLLOW</a></td>
         <td>${peserta.timestamp}</td>
     </tr>
     `;
