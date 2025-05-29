@@ -83,7 +83,7 @@ export default async function handler(req, res) {
     }
 
     const client = await clientPromise;
-    const db = client.db(); // default DB dari URI
+    const db = client.db('svr-2025'); // default DB dari URI
     const collection = db.collection('form_daftar');
 
     const insertResult = await collection.insertOne({
