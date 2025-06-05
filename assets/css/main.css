@@ -1874,10 +1874,20 @@ section,
 }
 
 .contact .info-item p {
-  padding: 0;
-  line-height: 24px;
-  font-size: 14px;
-  margin-bottom: 0;
+  margin: auto;
+}
+
+.button-folder {
+  background: var(--accent-color);
+  color: var(--contrast-color);
+  border: 0;
+  padding: 10px 30px;
+  transition: 0.4s;
+  border-radius: 4px;
+}
+
+.button-folder:hover {
+  background: color-mix(in srgb, var(--accent-color), transparent 20%);
 }
 
 .contact .php-email-form {
