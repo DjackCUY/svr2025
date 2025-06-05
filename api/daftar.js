@@ -69,16 +69,16 @@ export default async function handler(req, res) {
 
     const fileSWP = req.files['file-swp']?.[0];
     const fileFormat = req.files['file-format']?.[0];
-    const fileForm = req.files['file-format']?.[0];
+    const fileForm = req.files['file-formulir']?.[0];
 
     const swpUrl = fileSWP
-      ? await uploadToCloudinary(fileSWP.buffer, fileSWP.originalname || 'swp')
+      ? (await uploadToCloudinary(fileSWP.buffer, fileSWP.originalname || 'swp'))
       : null;
     const formatUrl = fileFormat
-      ? await uploadToCloudinary(fileFormat.buffer, fileFormat.originalname || 'format').replace(/\.pdf$/, '.jpg')
+      ? (await uploadToCloudinary(fileFormat.buffer, fileFormat.originalname || 'format')).replace(/\.pdf$/, '.jpg')
       : null;
     const formulirUrl = fileForm
-      ? await uploadToCloudinary(fileForm.buffer, fileForm.originalname || 'formulir').replace(/\.pdf$/, '.jpg')
+      ? (await uploadToCloudinary(fileForm.buffer, fileForm.originalname || 'formulir')).replace(/\.pdf$/, '.jpg')
       : null;
 
     const { name, email, instansi, nomor } = req.body;
@@ -100,6 +100,7 @@ export default async function handler(req, res) {
     hour: '2-digit', 
     minute: '2-digit', 
     second: '2-digit',
+    timeZone: 'Asia/Jakarta',
     timeZoneName: 'short'
     };
 
