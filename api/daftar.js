@@ -75,10 +75,10 @@ export default async function handler(req, res) {
       ? await uploadToCloudinary(fileSWP.buffer, fileSWP.originalname || 'swp')
       : null;
     const formatUrl = fileFormat
-      ? await uploadToCloudinary(fileFormat.buffer, fileFormat.originalname || 'format')
+      ? await uploadToCloudinary(fileFormat.buffer, fileFormat.originalname || 'format').replace(/\.pdf$/, '.jpg')
       : null;
     const formulirUrl = fileForm
-      ? await uploadToCloudinary(fileForm.buffer, fileForm.originalname || 'formulir')
+      ? await uploadToCloudinary(fileForm.buffer, fileForm.originalname || 'formulir').replace(/\.pdf$/, '.jpg')
       : null;
 
     const { name, email, instansi, nomor } = req.body;
