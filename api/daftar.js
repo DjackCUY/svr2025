@@ -63,17 +63,22 @@ export default async function handler(req, res) {
     // Jalankan middleware multer
     await runMiddleware(req, res, upload.fields([
       { name: 'file-swp' },
-      { name: 'file-follow' },
+      { name: 'file-format' },
+      { name: 'file-formulir' },
     ]));
 
     const fileSWP = req.files['file-swp']?.[0];
-    const fileFollow = req.files['file-follow']?.[0];
+    const fileFormat = req.files['file-format']?.[0];
+    const fileForm = req.files['file-format']?.[0];
 
     const swpUrl = fileSWP
       ? await uploadToCloudinary(fileSWP.buffer, fileSWP.originalname || 'swp')
       : null;
-    const followUrl = fileFollow
-      ? await uploadToCloudinary(fileFollow.buffer, fileFollow.originalname || 'follow')
+    const formatUrl = fileFormat
+      ? await uploadToCloudinary(fileFormat.buffer, fileFormat.originalname || 'format')
+      : null;
+    const formulirUrl = fileForm
+      ? await uploadToCloudinary(fileForm.buffer, fileForm.originalname || 'formulir')
       : null;
 
     const { name, email, instansi, nomor } = req.body;
@@ -86,14 +91,29 @@ export default async function handler(req, res) {
     const db = client.db('svr-2025'); // default DB dari URI
     const collection = db.collection('form_daftar');
 
+    const date = new Date();
+    const options = { 
+    weekday: 'long', 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric', 
+    hour: '2-digit', 
+    minute: '2-digit', 
+    second: '2-digit',
+    timeZoneName: 'short'
+    };
+
+    const indonesiaTime = date.toLocaleString('id-ID', options);
+
     const insertResult = await collection.insertOne({
       name,
       email,
       instansi,
       nomor,
       swpUrl,
-      followUrl,
-      timestamp: new Date(),
+      formatUrl,
+      formulirUrl,
+      timestamp: indonesiaTime,
     });
 
     console.log('MongoDB insert result:', insertResult);
