@@ -12,6 +12,7 @@ data.forEach((peserta, index) => {
         <td>${peserta.email}</td>
         <td>${peserta.instansi}</td>
         <td>${peserta.nomor}</td>
+        <td>${peserta.baju}</td>
         <td><a href="${peserta.swpUrl}" target="_blank">SWP</a></td>
         <td><a href="${peserta.formatUrl}" target="_blank">Format</a></td>
         <td><a href="${peserta.formulirUrl}" target="_blank">Formulir</a></td>
