@@ -81,9 +81,9 @@ export default async function handler(req, res) {
       ? (await uploadToCloudinary(fileForm.buffer, fileForm.originalname || 'formulir')).replace(/\.pdf$/, '.jpg')
       : null;
 
-    const { name, email, instansi, nomor } = req.body;
+    const { name, email, instansi, nomor, baju } = req.body;
 
-    if (!name || !email || !instansi || !nomor) {
+    if (!name || !email || !instansi || !nomor || !baju) {
       return res.status(400).json({ error: "Form tidak lengkap." });
     }
 
@@ -111,13 +111,14 @@ export default async function handler(req, res) {
       email,
       instansi,
       nomor,
+      baju,
       swpUrl,
       formatUrl,
       formulirUrl,
       timestamp: indonesiaTime,
     });
 
-    console.log('MongoDB insert result:', insertResult);
+    // console.log('MongoDB insert result:', insertResult);
 
     return res.status(200).send("OK");
 
