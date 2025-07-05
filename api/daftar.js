@@ -72,13 +72,13 @@ export default async function handler(req, res) {
     const fileForm = req.files['file-formulir']?.[0];
 
     const swpUrl = fileSWP
-      ? (await uploadToCloudinary(fileSWP.buffer, fileSWP.originalname || 'swp'))
+      ? (await uploadToCloudinary(fileSWP.buffer, (fileSWP.originalname || 'swp').trim()))
       : null;
     const formatUrl = fileFormat
-      ? (await uploadToCloudinary(fileFormat.buffer, fileFormat.originalname || 'format')).replace(/\.pdf$/, '.jpg')
+      ? (await uploadToCloudinary(fileFormat.buffer, (fileFormat.originalname || 'format').trim())).replace(/\.pdf$/, '.jpg')
       : null;
     const formulirUrl = fileForm
-      ? (await uploadToCloudinary(fileForm.buffer, fileForm.originalname || 'formulir')).replace(/\.pdf$/, '.jpg')
+      ? (await uploadToCloudinary(fileForm.buffer, (fileForm.originalname || 'formulir').trim())).replace(/\.pdf$/, '.jpg')
       : null;
 
     const { name, email, instansi, nomor, baju } = req.body;
