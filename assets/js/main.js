@@ -204,7 +204,7 @@
    */
 document.querySelector('.php-email-form').addEventListener('submit', function (e) {
   const swpFile = document.querySelector('input[name="file-swp"]').files[0];
-  const followFile = document.querySelector('input[name="file-follow"]').files[0];
+  const followFile = document.querySelector('input[name="file-formulir"]').files[0];
 
   const maxSize = 5 * 1024 * 1024; // 5MB
 
